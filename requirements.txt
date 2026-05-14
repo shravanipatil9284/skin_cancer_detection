@@ -1,0 +1,28 @@
+# Core scientific packages
+numpy
+pandas
+matplotlib
+scikit-learn
+seaborn
+
+# Image processing
+opencv-python
+Pillow
+
+# Deep Learning
+tensorflow==2.12.0
+
+# Web App (Flask)
+flask
+werkzeug
+
+# Visualization / Explainability
+matplotlib
+ seaborn
+
+# Jupyter for notebooks
+jupyterlab
+
+# Utilities
+tqdm
+fpdf

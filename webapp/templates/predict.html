@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="row justify-content-center">
+  <div class="col-lg-8">
+    <div class="card-med">
+      <h5>Upload image for prediction</h5>
+      <p class="text-muted small">
+        Use clear photos or dermatoscopic images. Best results with centered lesion.
+      </p>
+
+      <form method="POST" enctype="multipart/form-data"
+            class="predict-form mt-3">
+        <div class="mb-3">
+          <input name="image" type="file"
+                 class="form-control"
+                 accept="image/*" required>
+        </div>
+
+        <div class="d-flex gap-2">
+          <button type="submit" class="btn btn-primary">Analyze</button>
+          <a class="btn btn-outline-secondary"
+             href="{{ url_for('dashboard') }}">
+             Back to Dashboard
+          </a>
+        </div>
+      </form>
+
+      {% if image_file %}
+      <!-- ================= RESULT SECTION ================= -->
+      <hr class="my-4" />
+
+      <div class="row g-4 align-items-center">
+        <div class="col-md-6 text-center">
+          <div class="mb-2 small text-muted">Uploaded Image</div>
+          <img src="/static/{{ image_file }}"
+               class="preview-img"
+               alt="uploaded">
+        </div>
+
+        <div class="col-md-6 text-center">
+          <div class="mb-2 small text-muted">Grad-CAM Heatmap</div>
+          <img src="/static/{{ gradcam_file }}"
+               class="preview-img"
+               alt="gradcam">
+        </div>
+      </div>
+
+      <div class="mt-4 d-flex justify-content-center align-items-center gap-3">
+        {% if result == "Malignant" %}
+          <span class="badge-result bg-danger text-white">
+            Malignant
+          </span>
+        {% else %}
+          <span class="badge-result bg-success text-white">
+            Benign
+          </span>
+        {% endif %}
+        <h5 class="mb-0">{{ confidence }}%</h5>
+      </div>
+
+      {% if report_file %}
+      <div class="text-center mt-4">
+        <a href="/static/reports/{{ report_file }}"
+           class="btn btn-success"
+           download>
+          📄 Download Medical Report
+        </a>
+      </div>
+      {% endif %}
+
+      {% endif %}
+      <!-- ================= END RESULT SECTION ================= -->
+
+    </div>
+  </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-7">
+    <div class="card-med">
+      <h5>Profile</h5>
+      <div class="mt-3">
+        <p><strong>Name:</strong> {{ user['name'] }}</p>
+        <p><strong>Email:</strong> {{ user['email'] }}</p>
+      </div>
+
+      <div class="mt-3">
+        <a class="btn btn-outline-primary" href="{{ url_for('dashboard') }}">Back</a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

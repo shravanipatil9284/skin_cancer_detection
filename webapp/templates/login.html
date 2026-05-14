@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+
+    <style>
+        body {
+            background-image: url('https://wallpapercave.com/wp/wp2939956.png');
+            background-size: cover;
+            background-repeat: no-repeat;
+            min-height: 100vh;
+        }
+        .login-card {
+            max-width: 450px;
+            background: rgba(255, 255, 255, 0.92);
+            padding: 30px;
+            border-radius: 15px;
+            margin: 80px auto;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="login-card">
+    <h2 class="text-center mb-4">User Login</h2>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        {% for category, msg in messages %}
+            <div class="alert alert-{{ category }}">{{ msg }}</div>
+        {% endfor %}
+    {% endif %}
+    {% endwith %}
+
+    <form method="POST">
+        <div class="mb-3">
+            <label>Email</label>
+            <input type="email" name="email" class="form-control form-control-lg" required>
+        </div>
+
+        <div class="mb-3">
+            <label>Password</label>
+            <input type="password" name="password" class="form-control form-control-lg" required>
+        </div>
+
+        <button type="submit" class="btn btn-primary w-100 btn-lg">
+            Login
+        </button>
+    </form>
+    <p class="text-center mt-2">
+  <a href="{{ url_for('forgot_password') }}">Forgot password?</a>
+</p>
+
+    <p class="text-center mt-3">
+        Don’t have an account?
+        <a href="{{ url_for('register') }}">Register</a>
+    </p>
+</div>
+
+</body>
+</html>

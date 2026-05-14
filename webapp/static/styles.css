@@ -1,0 +1,97 @@
+/* --- Theme colors --- */
+:root{
+  --primary: #0d6efd;
+  --accent: #0b5ed7;
+  --muted-bg: #f6f8fb;
+  --card-bg: #ffffff;
+  --danger: #dc3545;
+  --success: #28a745;
+  --glass: rgba(255,255,255,0.7);
+}
+
+/* Global */
+body {
+  background: var(--muted-bg);
+  color: #0b1a2b;
+  font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+}
+
+/* Brand icon */
+.brand-icon {
+  width:44px;
+  height:44px;
+  background: linear-gradient(135deg,var(--primary),var(--accent));
+  color:white;
+  border-radius:8px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:700;
+  box-shadow: 0 6px 18px rgba(13,110,253,0.12);
+  margin-right:8px;
+}
+
+/* Cards */
+.card-med {
+  background: var(--card-bg);
+  border: none;
+  border-radius: 12px;
+  padding: 1.25rem;
+  box-shadow: 0 8px 30px rgba(13,30,60,0.06);
+}
+
+/* Buttons */
+.btn-primary {
+  background: linear-gradient(180deg,var(--primary),var(--accent));
+  border: none;
+}
+.btn-primary:hover { filter: brightness(.96); }
+
+/* Forms */
+.form-control {
+  border-radius:8px;
+  box-shadow:none;
+  border:1px solid #e6eef8;
+  padding: .75rem .9rem;
+}
+
+/* Loader overlay */
+.loader-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(12, 20, 40, 0.45);
+  z-index: 9999;
+  align-items: center;
+  justify-content: center;
+}
+.loader-card {
+  min-width: 300px;
+  background: white;
+  border-radius: 12px;
+  padding: 1.5rem 1.75rem;
+  box-shadow: 0 18px 50px rgba(10,20,40,0.25);
+}
+
+/* Image previews */
+.preview-img {
+  border-radius: 10px;
+  box-shadow: 0 8px 30px rgba(10,20,40,0.06);
+  max-width: 100%;
+}
+
+/* Badges */
+.badge-result {
+  font-size: .95rem;
+  padding: .5rem .65rem;
+  border-radius: 999px;
+}
+
+/* Dashboard stats */
+.stat-num { font-weight: 700; font-size: 1.45rem; }
+.stat-label { color: #6b7280; font-size: .9rem; }
+
+/* Responsive small screens */
+@media (max-width: 576px) {
+  .brand-icon { width:38px; height:38px; font-size:14px; }
+  .loader-card { margin: 0 1rem; }
+}
