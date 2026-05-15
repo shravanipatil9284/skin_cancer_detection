@@ -1,3 +1,4 @@
+import os
 import tensorflow as tf
 import numpy as np
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
@@ -9,13 +10,28 @@ from tensorflow.keras.callbacks import (
 
 from sklearn.utils.class_weight import compute_class_weight
 
-from tensorflow.keras.applications.mobilenet_v2 import preprocess_input
+from tensorflow.keras.applications.mobilenet_v2 import preprocess_input as mobilenet_preprocess
+from tensorflow.keras.applications.efficientnet import preprocess_input as efficientnet_preprocess
+from tensorflow.keras.applications.resnet50 import preprocess_input as resnet_preprocess
 
 from src.models.model_mobilenet import build_mobilenet
-
+from src.models.model_efficientnet import build_efficientnet
+from src.models.model_resnet import build_resnet
 
 TRAIN_DIR = "data/raw/train"
 VAL_DIR = "data/raw/val"
+MODEL_NAME="efficientnet"
+
+MODEL_BUILDERS = {
+    "mobilenet": build_mobilenet,
+    "efficientnet": build_efficientnet,
+    "resnet": build_resnet
+}
+PREPROCESS_FUNCS = {
+    "mobilenet": mobilenet_preprocess,
+    "efficientnet": efficientnet_preprocess,
+    "resnet": resnet_preprocess
+}
 
 
 BATCH_SIZE = 32
@@ -23,6 +39,8 @@ IMG_SIZE = (224, 224)
 
 
 def train_model():
+    os.makedirs("results", exist_ok=True)
+    os.makedirs("models", exist_ok=True)
     
 
     # -------------------------------
@@ -30,7 +48,7 @@ def train_model():
     # -------------------------------
 
     train_gen = ImageDataGenerator(
-        preprocessing_function=preprocess_input,
+        preprocessing_function=PREPROCESS_FUNCS[MODEL_NAME],
         rotation_range=25,
         zoom_range=0.2,
         horizontal_flip=True,
@@ -40,7 +58,7 @@ def train_model():
     )
 
     val_gen = ImageDataGenerator(
-        preprocessing_function=preprocess_input
+        preprocessing_function=PREPROCESS_FUNCS[MODEL_NAME]
     )
     
     train_data = train_gen.flow_from_directory(
@@ -80,7 +98,7 @@ def train_model():
     # BUILD MODEL
     # -------------------------------
 
-    model = build_mobilenet()
+    model = MODEL_BUILDERS[MODEL_NAME]()
 
     # -------------------------------
     # STAGE 1 — TRAIN TOP LAYERS
@@ -98,7 +116,7 @@ def train_model():
     )
 
     checkpoint = ModelCheckpoint(
-        "models/best_model.keras",
+        f"models/{MODEL_NAME}_best.keras",
         monitor="val_auc",
         mode="max",
         save_best_only=True,
@@ -135,11 +153,13 @@ def train_model():
     # -------------------------------
 
     print("\n===== STAGE 2 FINE TUNING =====\n")
-
     model.trainable = True
 
-    for layer in model.layers[:-30]:
+    base_model = model.base_model
+
+    for layer in base_model.layers[:-30]:
         layer.trainable = False
+
 
     model.compile(
         optimizer=tf.keras.optimizers.Adam(1e-5),
@@ -184,7 +204,7 @@ def train_model():
     plt.ylabel("Accuracy")
     plt.title("Training vs Validation Accuracy")
     plt.legend()
-    plt.savefig("results/accuracy_plot.png")
+    plt.savefig(f"results/{MODEL_NAME}_accuracy.png")
     plt.show()
 
     # Loss Plot
@@ -195,7 +215,7 @@ def train_model():
     plt.ylabel("Loss")
     plt.title("Training vs Validation Loss")
     plt.legend()
-    plt.savefig("results/loss_plot.png")
+    plt.savefig(f"results/{MODEL_NAME}_loss.png")
     plt.show()
 
     # AUC Plot
@@ -206,7 +226,7 @@ def train_model():
     plt.ylabel("AUC")
     plt.title("Training vs Validation AUC")
     plt.legend()
-    plt.savefig("results/auc_plot.png")
+    plt.savefig(f"results/{MODEL_NAME}_auc.png")
     plt.show()
 
 

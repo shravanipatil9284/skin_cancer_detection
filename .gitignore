@@ -63,3 +63,7 @@ Thumbs.db
 webapp/static/upload_*
 webapp/static/gradcam_*
 webapp/static/reports/
+webapp/static/*.jpg
+requirements_current.txt
+results/
+models/*.keras
